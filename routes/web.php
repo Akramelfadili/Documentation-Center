@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,27 +14,26 @@ use App\Http\Controllers\DashboardController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-        // main page for log in or Registration
+require __DIR__.'/auth.php';   
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-/* Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard'); */
-    
- Route::group(['middlware' => ['auth']],function(){
+Route::group(['middlware' => ['auth']],function(){
     Route::get("/dashboard","App\Http\Controllers\DashboardController@index")->name("dashboard");
 }); 
-        // Profil for Users
+                 // User Routes
 Route::group(["middleware"=>["auth","role:user"]],function(){
     Route::get("/dashboard/myprofil","App\Http\Controllers\DashboardController@profile")->name("dashboard.myprofil");
 });
 
-/* Route::get("/dashboard/Roles",[DashboardController::class,'Affection_Role'])->middlware(["auth"])->name("dashboard.roles"); */
-
+                // Admin Routes
 Route::group(["middleware"=>["auth","role:Admin"]],function(){
-    Route::get("/dashboard/roles","App\Http\Controllers\DashboardController@Admin_Role")->name("dashboard.roles");
+    Route::get("/dashboard/admin/editeurs","App\Http\Controllers\UserController@index")->name("dashboard.admin.editeurs");
+    Route::get("/admin/editeurs/add",[UserController::class,"create"])->name("admin.add");    //creer editeur
+    Route::post("/admin/editeurs/add",[UserController::class,"store"])->name("admin.add");   //ajouter editeur
+    Route::get("/delete/{id}",[UserController::class,"destroy"])->name("admin.delete");  //delete editeur
 });
 
-require __DIR__.'/auth.php';
+

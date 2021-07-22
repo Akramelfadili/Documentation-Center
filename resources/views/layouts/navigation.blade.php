@@ -27,8 +27,8 @@
                 {{-- Elemnents navbar for Admin to administrate roles --}}
                 @if(Auth::user()->hasRole("Admin"))
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard.roles')" :active="request()->routeIs('dashboard.roles')">
-                        {{ __('Ajouter Editeur') }}
+                    <x-nav-link :href="route('dashboard.admin.editeurs')" :active="request()->routeIs('dashboard.admin.editeurs')">
+                        {{ __('Editeurs') }}
                     </x-nav-link>
                 </div>
                 @endif
