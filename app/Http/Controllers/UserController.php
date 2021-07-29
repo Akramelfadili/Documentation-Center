@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Auth\Events\Registered;
+use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
+use Illuminate\Auth\Events\Registered;
 
 
 class UserController extends Controller
@@ -68,7 +69,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**
@@ -79,7 +80,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        /* $user=DB::table("users")->where("id",$id)->get();
+        return view("Admin.ModifierEditeur",["user"=>$user]); */
     }
 
     /**
