@@ -13,10 +13,8 @@ class Modele extends Model
     protected $table="modeles";
     public $timestamps="true";
 
-    public function Metadonnees(){
-        return $this->belonsToMany(Metadonnees::class);
+   
+    public function metadonnees(){
+        return $this->belongsToMany(Metadonnees::class);
     }
-
-        
-
 }

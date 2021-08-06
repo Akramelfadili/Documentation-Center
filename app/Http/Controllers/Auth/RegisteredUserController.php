@@ -46,7 +46,7 @@ class RegisteredUserController extends Controller
         ]);
         
         // this let you  store a user with a specific role (user by default)
-         $user->attachRole("user");
+         $user->attachRole("Utilisateur_externe");
 
         event(new Registered($user));
 

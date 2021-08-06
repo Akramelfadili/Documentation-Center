@@ -19,6 +19,7 @@ class ModeleController extends Controller
 
    public function store(Request $request){
         if(Request::ajax()) {
+
             $request=Request::all();
             $name=$request["name"];
             $tableMod=$request["tableau"];
@@ -28,24 +29,27 @@ class ModeleController extends Controller
            
 
              // save modele name 
-             $model=new Modele;
+            $model=new Modele;
             $model->model_name=$name;
             $model->save(); 
 
                 //get (id)model of added model
             $id=Modele::where("model_name",$name)->first();
 
-                    //inserer les id de metadonnnes lie au modele
+                //inserer les id de metadonnnes lie au modele
             for ($i=0; $i <$tailleTabMo ; $i++) { 
-                DB::table("modele_metadonnees")->insert(["modele_id"=>$id->id,"metadonnees_id"=>$tableMod[$i]]);
+                DB::table("metadonnees_modele")->insert(["modele_id"=>$id->id,"metadonnees_id"=>$tableMod[$i]]);
             }  
-            
-         
-            
-
         }
+    }
         
+    
+    public function addDocument(){
+            $modele=Modele::all();
+            $classes=DB::table("classe_documents")->get();
+            $data = array("modele"=>$modele,"classes"=>$classes);
+             return view("Editeur.AddDocument")->with($data);
+    }
         
-      // dd(json_decode($data)); 
-   }
+   
 }

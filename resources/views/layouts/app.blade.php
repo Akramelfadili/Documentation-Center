@@ -44,10 +44,12 @@
        
         $('document').ready(function(){
                     $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                }
                 });
+
+                //Add modele on click button
                 var tab=[];
                 $("#btn").click(function(){
                     $("#boxes input:checked").each(function(){
@@ -67,11 +69,47 @@
                             {
                                 $('#response').html(response);
                             }
-                    }); 
-                    console.log()
+                    });
                 });
-                
-                
+
+
+                $("select").val(0);
+                $('.form').hide();
+                // show form corresponding to option selected (Modele)
+                $("#select").on("change",function(){
+                    var value= $('#select option:selected').text();
+                    $('.form').hide();
+                    $('#' + value).show();  
+                });
+
+                //get and send document data
+                $(".button15").click(function(){
+                    var modele=$('#select :selected').text();  //modele selected
+                    var classe=$('#class_doc :selected').text();  //modele selected
+                    var jsonData=[];
+                    $("#"+modele+" input").each(function(){
+                            var input=$(this);
+                            if(input.attr("type")!="hidden" ){
+                               // console.log('Type: ' + input.attr('type') + '  Name: ' + input.attr('name') + ' Value: ' + input.val());
+                                var name=input.attr("name");
+                                var value=input.val();
+                                var item={};
+                                item[name]=value;
+                                //console.log(item);
+                                jsonData.push(item); 
+                            }
+                    });
+                    var data={modeleName:modele,classeName:classe,formData:jsonData};
+                    console.log(data);
+                   /*  $.ajax({
+                      type: "POST",
+                      url: "/editeur/sendDocument",
+                      data: data,
+                      success: function (response) {
+                            $('#succesMessage').html(response);
+                      }  
+                    });  */  
+                });
         });
        
     </script>

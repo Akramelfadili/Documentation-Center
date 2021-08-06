@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class ModeleMetadonnees extends Model
 {
     use HasFactory;
+    protected $table="metadonnees_modele";
+    
 }

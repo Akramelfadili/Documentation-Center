@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateClasseDocumentsTable extends Migration
+class CreateClassesDocumentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class CreateClasseDocumentsTable extends Migration
     public function up()
     {
         Schema::create('classe_documents', function (Blueprint $table) {
-            $table->id();
+            $table->increments("id");
             $table->string("classe_name")->unique();
             $table->timestamps();
         });
@@ -27,6 +27,6 @@ class CreateClasseDocumentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('classe_documents');
+        Schema::dropIfExists('classes_documents');
     }
 }
