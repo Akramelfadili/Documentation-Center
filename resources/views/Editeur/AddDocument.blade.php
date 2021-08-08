@@ -23,18 +23,20 @@
                 @endforeach
             </select>
         </div>
+
         <div id="show_form">
             @foreach($modele as $m)
                     <form class="form" id="{{ $m->model_name }}" method="POST" action="#" >
                         @csrf
                         @method('PUT')
                         @foreach($m->metadonnees as $z)
-                            <label >{{ $z->name }} : </label><input  type="text" name="{{ $z->name }}"  required="required"     ><br>
+                            <label >{{ $z->name }} : </label><input  type="text" name="{{ $z->id }}"><br>
                         @endforeach 
-                        <label>Mot Descriptifs : </label><input type="text" name="Mots Descriptifs"  required="required" ><br>
-                        <a href="#" class="button15">Send</a>
+                        <input type="file" class="{{$m->model_name}}"  accept=".accdb,.jpg,.png,.docx " multiple > 
+                        <a href="#" class="button15">Ajouter Document</a>
                     </form>
             @endforeach
         </div>
+
     </div>
 </x-app-layout>

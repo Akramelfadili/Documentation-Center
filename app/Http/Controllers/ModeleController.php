@@ -24,10 +24,7 @@ class ModeleController extends Controller
             $name=$request["name"];
             $tableMod=$request["tableau"];
             $tailleTabMo=count($request["tableau"]);
-           /*  dump($tailleTabMo);
-            dump($tableMod); */
-           
-
+      
              // save modele name 
             $model=new Modele;
             $model->model_name=$name;

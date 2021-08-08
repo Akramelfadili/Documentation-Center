@@ -47,7 +47,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                                 }
-                });
+                    });
 
                 //Add modele on click button
                 var tab=[];
@@ -83,32 +83,61 @@
                 });
 
                 //get and send document data
-                $(".button15").click(function(){
+                $(".button15").click(function(e){
                     var modele=$('#select :selected').text();  //modele selected
                     var classe=$('#class_doc :selected').text();  //modele selected
-                    var jsonData=[];
+                    var MetaIdArray=new Array();
+                    var MetaValuesArray=new Array();
                     $("#"+modele+" input").each(function(){
                             var input=$(this);
-                            if(input.attr("type")!="hidden" ){
-                               // console.log('Type: ' + input.attr('type') + '  Name: ' + input.attr('name') + ' Value: ' + input.val());
+                            if(input.attr("type")!="hidden" && input.attr("type")!="file"){
                                 var name=input.attr("name");
+                                MetaIdArray.push(name);
                                 var value=input.val();
-                                var item={};
-                                item[name]=value;
-                                //console.log(item);
-                                jsonData.push(item); 
+                                MetaValuesArray.push(value);
                             }
                     });
-                    var data={modeleName:modele,classeName:classe,formData:jsonData};
-                    console.log(data);
-                   /*  $.ajax({
+                  
+                    var files = $('.'+modele)[0].files;
+                    var form = new FormData();
+                   // console.log(files.length);
+                      for (let index = 0; index < files.length; index++) {
+                        form.append( "files[]" , files[index] );
+                       // console.log(files[index]);
+                    }  
+                    form.append("modele",modele);
+                    $.ajax({
                       type: "POST",
                       url: "/editeur/sendDocument",
-                      data: data,
+                      processData:false,
+                      contentType: false,
+                      data:form,
                       success: function (response) {
                             $('#succesMessage').html(response);
                       }  
-                    });  */  
+                    });   
+                    
+
+
+                   /*  var fileArray=[];
+                     var files = $("."+modele).get(0).files; 
+                    for (var index = 0; index < files.length; index++) {
+                        var file=files[index];
+                        fileArray.push(file.name);
+                    }  
+                    console.log(fileArray);
+                
+                    var data={modeleName:modele,classeName:classe,idArray:MetaIdArray,valuesArray:MetaValuesArray,files:fileArray}
+                      $.ajax({
+                      type: "POST",
+                      url: "/editeur/sendDocument",
+                      data: data,
+                      dataType:"json",
+                      success: function (response) {
+                            $('#succesMessage').html(response);
+                      }  
+                    });     */
+                     
                 });
         });
        
