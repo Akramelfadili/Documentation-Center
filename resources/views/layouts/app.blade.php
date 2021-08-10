@@ -86,58 +86,36 @@
                 $(".button15").click(function(e){
                     var modele=$('#select :selected').text();  //modele selected
                     var classe=$('#class_doc :selected').text();  //modele selected
-                    var MetaIdArray=new Array();
-                    var MetaValuesArray=new Array();
+                    var form = new FormData();
                     $("#"+modele+" input").each(function(){
                             var input=$(this);
                             if(input.attr("type")!="hidden" && input.attr("type")!="file"){
                                 var name=input.attr("name");
-                                MetaIdArray.push(name);
+                                form.append("ids[]",name);             // get all ids
                                 var value=input.val();
-                                MetaValuesArray.push(value);
+                                form.append("values[]",value);          //get alls input values
                             }
                     });
-                  
+                    
+                    //get files
                     var files = $('.'+modele)[0].files;
-                    var form = new FormData();
-                   // console.log(files.length);
-                      for (let index = 0; index < files.length; index++) {
+                   
+                    for (let index = 0; index < files.length; index++) {
                         form.append( "files[]" , files[index] );
-                       // console.log(files[index]);
-                    }  
-                    form.append("modele",modele);
+                    }
+                    //add data for object send by ajax
+                    form.append("modeleName",modele);
+                    form.append("classeName",classe);
                     $.ajax({
                       type: "POST",
                       url: "/editeur/sendDocument",
                       processData:false,
                       contentType: false,
                       data:form,
-                      success: function (response) {
-                            $('#succesMessage').html(response);
+                      success: function (response) {    
                       }  
                     });   
                     
-
-
-                   /*  var fileArray=[];
-                     var files = $("."+modele).get(0).files; 
-                    for (var index = 0; index < files.length; index++) {
-                        var file=files[index];
-                        fileArray.push(file.name);
-                    }  
-                    console.log(fileArray);
-                
-                    var data={modeleName:modele,classeName:classe,idArray:MetaIdArray,valuesArray:MetaValuesArray,files:fileArray}
-                      $.ajax({
-                      type: "POST",
-                      url: "/editeur/sendDocument",
-                      data: data,
-                      dataType:"json",
-                      success: function (response) {
-                            $('#succesMessage').html(response);
-                      }  
-                    });     */
-                     
                 });
         });
        

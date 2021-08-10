@@ -24,6 +24,15 @@
                     {{-- Elemnents navbar for Admin to administrate roles --}}
                            {{--  For editeur Dashboard --}}
 
+                             
+                    @if (Auth::user()->hasRole("Editeur"))
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('editeur.doc')" :active="request()->routeIs('editeur.doc')">
+                            {{ __('Documents') }}
+                        </x-nav-link>
+                    </div>
+                    @endif
+
                     @if (Auth::user()->hasRole("Editeur"))
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                         <x-nav-link :href="route('editeur.addDoc')" :active="request()->routeIs('editeur.addDoc')">
@@ -31,6 +40,7 @@
                         </x-nav-link>
                     </div>
                     @endif
+                  
 
                        {{--  For adming dashboard --}}
                     @if(Auth::user()->hasRole("Admin"))
