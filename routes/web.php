@@ -51,8 +51,8 @@ Route::group(["middleware"=>["auth","role:Admin"]],function(){
                 //Editeur Routes
 Route::group(["middlware"=>["auth","role:Editeur"]],function(){         
     Route::get("/editeur/AddDocument",[ModeleController::class,"addDocument"])->name("editeur.addDoc");
-    Route::post("/editeur/sendDocument",[DocumentController::class,"storeDocument"])->name("editeur.storeDoc");
-    Route::get("/editeur/Documents",[DocumentController::class,"showDocuments"])->name("editeur.doc");
+    Route::post("/editeur/sendDocument",[DocumentController::class,"storeDocument"])->name("editeur.storeDoc");    
+    Route::get("/editeur/Documents",[DocumentController::class,"showDocuments"])->name("editeur.doc");    
 });
 
 

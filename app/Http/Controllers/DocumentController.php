@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 use App\Models\Modele;
 use App\Models\Document; 
+use Illuminate\Support\Arr;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Request;
 
 
 class DocumentController extends Controller
@@ -34,7 +35,7 @@ class DocumentController extends Controller
     
            //document added id
             $documentID=Document::latest()->first();
-            //add to intermidiate table doc_meta_vlues
+            //add to intermidiate table doc_meta_vluesP
             $tailleIds=count($ids);
             $tailleValues=count($values);
              if($tailleIds == $tailleValues){
@@ -48,7 +49,7 @@ class DocumentController extends Controller
             for ($i=0; $i <$number ; $i++) { 
                 $fileName=$files[$i]->getClientOriginalName();
                 $filePath = $files[$i]->storeAs('uploads', $fileName, 'public');
-                $path='/storage/ '.$filePath;
+                $path='/storage/app/public/uploads/'.$filePath;
                 DB::table("files")->insert(["document_id"=>$modele_id,"name"=>$fileName,"file_path"=>$path]);
             }  
            
@@ -58,6 +59,9 @@ class DocumentController extends Controller
     }
 
     public function showDocuments(){
-        echo "Akram";
+        $documents=Document::get();     //get all docments
+        $values=DB::table("document_metadonnees_values")->get();   // get values to show them based on documents details
+        $files=DB::table("files")->get();
+        return view("editeur.showDocuments",["documents"=>$documents,"values"=>$values,"files"=>$files]);
     }
 }
