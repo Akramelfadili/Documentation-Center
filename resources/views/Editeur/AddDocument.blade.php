@@ -32,7 +32,7 @@
                         @foreach($m->metadonnees as $z)
                             <label >{{ $z->name }} : </label><input  type="text" name="{{ $z->id }}"><br>
                         @endforeach 
-                        <input type="file" class="{{$m->model_name}}"  accept=".accdb,.jpg,.png,.docx " multiple > 
+                        <input type="file" class="{{$m->model_name}}"  accept=".tiff,.pdf,.docx,.csv,.png,.jpg,.pptx,.xlsx,.txt" multiple > 
                         <a href="#" class="button15">Ajouter Document</a>
                     </form>
             @endforeach

@@ -41,13 +41,12 @@
 
 
     <script >
-       
         $('document').ready(function(){
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                }
-                    });
+                 $.ajaxSetup({
+                    headers: {
+                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                         }
+                });
 
                 //Add modele on click button
                 var tab=[];
@@ -95,7 +94,7 @@
                                 var value=input.val();
                                 form.append("values[]",value);          //get alls input values
                             }
-                    });
+                    }); 
                     
                     //get files
                     var files = $('.'+modele)[0].files;
@@ -116,6 +115,68 @@
                       }  
                     });   
                     
+                });
+
+                    // show doc based on search input
+                $("#search").on("keyup",function(){
+                    var array=new Array();
+                    value=$(this).val();
+                    //console.log(value);
+                    $.ajax({
+                       type: "POST",
+                       url: "/editeur/Documents/Search",
+                       data: {"search":value},
+                       dataType: "json",
+                       success:function(data){ 
+                            // get id selected for db without duplicate
+                            for (let index = 0; index < data.length; index++) {
+                                if(array.includes(data[index].document_id) == false ){
+                                    array.push(data[index].document_id);
+                                }
+                            }
+                            console.log(array);
+                            if(value ==""){
+                                $(".doc_divs").show();
+                            }else if(value!="") {
+                                $(".doc_divs").hide();
+                                for (let index = 0; index < array.length; index++) {
+                                    $("#"+array[index]).show();
+                                }
+                            }else{
+                                console.log("akram")
+                            }
+                            
+                       }   
+                   });
+                });
+
+                $("#submit_data").click(function(){
+                    var form = new FormData();
+                    $("#edit_form input").each(function(){
+                       
+                        var input=$(this);
+                        if(input.attr("type")!="hidden" ){
+                            //var name=parseInt(input.attr("name"));
+                            var name=input.attr("name");
+                           // console.log(name);
+                            form.append("ids[]",name);
+                            //console.log(typeof name);
+                            var value=input.val();
+                            form.append("values[]",value);
+                            //console.log(value);
+                        }
+                    });
+                    var id=$(this).closest("form").attr("class");
+                    form.append("id_doc",id);
+                      $.ajax({
+                      type: "POST",
+                      url: "/editeur/save",
+                      processData:false,
+                      contentType: false,
+                      data:form,
+                      success: function (response) {    
+                      }  
+                    });   
                 });
         });
        
