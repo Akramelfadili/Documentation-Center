@@ -10,7 +10,7 @@ use Datatables;
 class ClasseDocumentController extends Controller
 {
     public function index(){
-      $classes = DB::table('classe_documents')->get();
+      $classes = DB::table('classe_documents')->paginate(3);
      return view("Admin.classDocument",["classes"=>$classes]);
          
     }

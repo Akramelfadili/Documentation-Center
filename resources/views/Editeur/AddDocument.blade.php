@@ -9,6 +9,7 @@
         <label for="">Choissisez un modele de Document a a ajouter</label>
         <div id="select">
             <select >
+                <option selected disabled>Choose modele</option>
                 @foreach($modele as $m)
                        <option >{{ $m->model_name }}</option> 
                 @endforeach
@@ -18,7 +19,9 @@
         <label for="">Classe de documents associe au Document</label>
         <div id="class_doc">
             <select>
+                <option selected disabled>Choose classe</option>
                 @foreach($classes as $classe)
+                
                     <option  >{{ $classe->classe_name }}</option>
                 @endforeach
             </select>
@@ -26,14 +29,14 @@
 
         <div id="show_form">
             @foreach($modele as $m)
-                    <form class="form" id="{{ $m->model_name }}" method="POST" action="#" >
+                    <form class="form_add_doc" id="{{ $m->model_name }}" method="POST" action="#" >
                         @csrf
                         @method('PUT')
                         @foreach($m->metadonnees as $z)
                             <label >{{ $z->name }} : </label><input  type="text" name="{{ $z->id }}"><br>
                         @endforeach 
-                        <input type="file" class="{{$m->model_name}}"  accept=".tiff,.pdf,.docx,.csv,.png,.jpg,.pptx,.xlsx,.txt" multiple > 
-                        <a href="#" class="button15">Ajouter Document</a>
+                        <input type="file" class="{{$m->model_name}}"  accept=".accdb,.tiff,.pdf,.docx,.csv,.png,.jpg,.pptx,.xlsx,.txt" multiple > 
+                        <a href="#" class="button_add_doc">Ajouter Document</a>
                     </form>
             @endforeach
         </div>

@@ -21,7 +21,17 @@
                     </div>
                     @endif
                     
-                    {{-- Elemnents navbar for Admin to administrate roles --}}
+      
+                           {{--  For utilisateur Dashboard --}}
+               
+                           @if (Auth::user()->hasRole("Utilisateur_externe"))
+                           <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                               <x-nav-link :href="route('user.search_doc_user')" :active="request()->routeIs('user.search_doc_user')">
+                                   {{ __(' Recheche Documents') }}
+                               </x-nav-link>
+                           </div>
+                           @endif
+                        
                            {{--  For editeur Dashboard --}}
 
                              

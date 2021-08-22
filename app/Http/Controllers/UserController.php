@@ -20,7 +20,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::whereRoleIs(['Editeur'])->get();
+        $users = User::whereRoleIs(['Editeur'])->paginate(4);
         return view("Admin.editeurs",['users'=>$users]);  
     }
 
@@ -58,7 +58,7 @@ class UserController extends Controller
             //Ajouter utilisateur avec role d'editeur puis redirection vers la page d'editeur de l'admin
         $user->attachRole("Editeur");
         event(new Registered($user));
-        return redirect("/dashboard/admin/editeurs");
+        return redirect("/dashboard/admin/editeurs")->with("succes","Editeur added sucessfuly");
     }
 
     /**

@@ -3,6 +3,7 @@
     </x-slot>
 
     <div>    
+      
         <div id="response_search">   </div>
         <div >
             <label >Search </label><input type="text" id="search">
@@ -27,23 +28,21 @@
                     @endforeach
                     <hr>
                     @for($i = 0; $i < count($files); $i++)
-                       @if($doc->id == $files[$i]->document_id)
+                       @if($doc->id == $files[$i]->document_id )
                             <a download="{{ $files[$i]->name }}" href="{{ Storage::url('uploads/'.$files[$i]->name) }}" >
-                              {{ $files[$i]->name }}
-                            </a>
-                            <br>
+                              {{ $files[$i]->name }}  {{-- <img src="{{ asset("images/word.jpg") }}" alt="" width="25" height="25">     --}}
+                             {{--  <a href="{{ asset("images/word.jpg") }}" class="images_pop">The home page will open in another tab.</a> --}}
+                           {{--   <iframe src='https://view.officeapps.live.com/op/embed.aspx?src={{  Storage::url('uploads/'.$files[$i]->name)  }}' width='1366px' height='623px' frameborder='0' target="_blank">This is an embedded <a target='_blank' href='http://office.com'>Microsoft Office</a> document, powered by <a target='_blank' href='http://office.com/webapps'>Office Online</a>.</iframe> --}}
+                    
+                           </a><br>
                        @endif 
                     @endfor
+                    <a href=""></a>
                     <hr>
                     <button><a href="/editeur/{{$doc->id}}/edit">Edit</a></button>
             </div>  
         @endforeach
         </div>
-        
-            
-       {{--   <div>
-            {!! $documents->links() !!}
-        </div> --}} 
     </div>
   
 

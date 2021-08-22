@@ -17,13 +17,16 @@ class DocumentController extends Controller
 {
     public function storeDocument(Request $request){
         if(Request::ajax()) {
+
             $request=Request::all();
+           // dd($request);
             $modele=$request["modeleName"]; //modele name
             $classe=$request["classeName"]; //classe name
             $files=$request["files"]; // files
             $ids=$request["ids"];
+           // dd($files);
             $values=$request["values"];
-    
+            
               // get id of selected model
            $modele_db=DB::table("modeles")->where("model_name",$modele)->first();
            $modele_id=$modele_db->id;
@@ -47,17 +50,15 @@ class DocumentController extends Controller
                     DB::table("document_metadonnees_values")->insert(["document_id"=>$documentID->id,"metadonnees_id"=>$ids[$i],"value"=>$values[$i]]);
                 }
             }   
-            
-            //get last added document
-
+    
             //add files to database and filepath to storage place
             $number=count($files);
             for ($i=0; $i <$number ; $i++) { 
                 $fileName=$files[$i]->getClientOriginalName();
                 $filePath = $files[$i]->storeAs('uploads', $fileName, 'public');
-                $path='/storage/app/public/uploads/'.$filePath;
+                $path='/storage/app/public/'.$filePath;
                 DB::table("files")->insert(["document_id"=>$documentID->id,"name"=>$fileName,"file_path"=>$path]);
-            }    
+            }  
         }
     }
 
@@ -79,7 +80,6 @@ class DocumentController extends Controller
     }
 
    public function editDocument($id){
-      // $doc=Document::find($id);
        $doc=Document::find($id);
        $array =[];  // aray of metadonnes associated with chosen document
        $arrayMetaIDs=[];
@@ -88,11 +88,13 @@ class DocumentController extends Controller
            array_push($array,$metaDocument[$i]->name); 
            array_push($arrayMetaIDs,$metaDocument[$i]->id);
        }
-       //dd($arrayMetaIDs);
+       $classe_doc = $doc->class->id;
+       $classes= DB::table("classe_documents")->get();
        $values=DB::table("document_metadonnees_values")->where("document_id",$id)->select("value")->get(); // get all values of document selected
-        return view("Editeur.editDocument",["values"=>$values,"array"=>$array,"IDS"=>$arrayMetaIDs,"document_id"=>$id]);
+        return view("Editeur.editDocument",["values"=>$values,"array"=>$array,"IDS"=>$arrayMetaIDs,"document_id"=>$id,"classe_doc"=>$classe_doc,"classes"=>$classes]);
     }
-        //save edited document data
+
+        //  save edited document data
     public function storeDocumentEdited(Request $request){
         if(Request::ajax()){
             $request=Request::all();
@@ -109,6 +111,40 @@ class DocumentController extends Controller
                             ->update(["value"=>$values[$i]]);
             }  
 
+        }
+    }
+
+
+
+    // user
+    public function searchDocument(){
+        return view("Utilisateur_Externe.Recherche_doc");
+    }
+
+    public function viewDocuments(Request $request){
+        if(Request::ajax()){
+            $request= Request::all();
+            $tab_document_ids=[];
+            $value=$request["value"];
+            if($request["checked"]== 1){
+                $number=count($request["checkboxes"]);
+                if($number == 1){
+                    $ids=DB::table("metadonnees")->where("name",$request["checkboxes"][0])->select("id")->get();
+                    $row=DB::table("document_metadonnees_values")
+                            ->where("metadonnees_id",$ids[0]->id)
+                            ->where("value","LIKE","%".$value."%")
+                            ->select("document_id")->get();
+                    //dd($row[0]->document_id);
+                    for ($i=0; $i <count($row) ; $i++) { 
+                        array_push($tab_document_ids,$row[$i]->document_id);
+                    }
+                   // dd($tab_document_ids);
+                }
+                
+                
+            }else {
+                dd("Akram");
+            }
         }
     }
 }

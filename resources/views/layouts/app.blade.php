@@ -46,45 +46,62 @@
                     headers: {
                          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                          }
-                });
-
+                 });
+             
                 //Add modele on click button
-                var tab=[];
                 $("#btn").click(function(){
+                    var tab=[];
                     $("#boxes input:checked").each(function(){
-                        tab.push($(this).attr("name"));
+                        if(tab.includes($(this).attr("name")) == false){
+                            tab.push($(this).attr("name"));
+                        }
                     });
                     var modelname=$("#nomModele").val(); 
-                    console.log(modelname)
-                    console.log(tab)
 
-                   var data={name:modelname,tableau:tab}
-
-                    $.ajax({
-                        type: "POST",
-                        url: "/admin/modele",
-                        data: data,
-                        success: function(response)
-                            {
-                                $('#response').html(response);
-                            }
-                    });
+                    if( modelname.length ==0 &&  $(":checkbox:checked").length == 0){
+                        $("#bothinputs_empty").show("slow").delay(3000).hide("slow");
+                    }else if(modelname.length ==0){
+                        $("#modelname_missing").show("slow").delay(3000).hide("slow");
+                    }else if( $(":checkbox:checked").length == 0 ) {
+                        $("#checkboxed_empty").show("slow").delay(3000).hide("slow")
+                    }else {
+                         var data={name:modelname,tableau:tab};
+                         console.log("we vibing");
+                         $.ajax({
+                            type: "POST",
+                            url: "/admin/modele",
+                            data: data,
+                            success: function(response)
+                                {
+                                    $('#response').html(response);
+                                }
+                        }); 
+                    }
+                });
+                    //uncheck all boxes(admin-modele)
+                $("#unckeck_all").click(function(){
+                    $(':checkbox').each(function() {
+                        this.checked = false;
+                    }); 
                 });
 
 
-                $("select").val(0);
-                $('.form').hide();
+                          //ajouter document jquery
+                //$("select").val(0);
+                $('.form_add_doc').hide();
                 // show form corresponding to option selected (Modele)
                 $("#select").on("change",function(){
                     var value= $('#select option:selected').text();
-                    $('.form').hide();
+                    $('.form_add_doc').hide();
                     $('#' + value).show();  
                 });
 
                 //get and send document data
-                $(".button15").click(function(e){
+                $(".button_add_doc").click(function(e){
                     var modele=$('#select :selected').text();  //modele selected
+                    console.log(modele);
                     var classe=$('#class_doc :selected').text();  //modele selected
+                    console.log(classe);
                     var form = new FormData();
                     $("#"+modele+" input").each(function(){
                             var input=$(this);
@@ -105,7 +122,7 @@
                     //add data for object send by ajax
                     form.append("modeleName",modele);
                     form.append("classeName",classe);
-                    $.ajax({
+                     $.ajax({
                       type: "POST",
                       url: "/editeur/sendDocument",
                       processData:false,
@@ -113,9 +130,11 @@
                       data:form,
                       success: function (response) {    
                       }  
-                    });   
+                    });    
                     
                 });
+
+
 
                     // show doc based on search input
                 $("#search").on("keyup",function(){
@@ -178,7 +197,69 @@
                       }  
                     });   
                 });
-        });
+
+                    // show checkboxes on search metadonnnees
+                $("#method_search_select").change(function(){
+                       var val=$(this).children("option:selected").val();
+                       if( val == "Recherche selon Metadonnees"){
+                            $("#based_select").show();
+                       }else {
+                           $("#based_select").hide();
+                       }
+                });
+                    // on click recherche button
+                $("#btn_recherche_doc").on("click",function(){
+                       var form = new FormData();
+                       var selected_value=$("#method_search_select option:selected").val();
+                       var input_value=$(".recheche_input_text").val();
+
+                       if(selected_value == "Recherche selon Metadonnees" || selected_value == "Recherche Libre"){
+                             if(selected_value == "Recherche selon Metadonnees"){
+                                    var tab=[];
+                                    var number =$('input:checkbox:checked').length;
+                                    $("#based_select input:checked").each(function(){
+                                        tab.push($(this).attr("name"));
+                                        form.append("checkboxes[]",$(this).attr("name"));
+                                    })
+
+                                    if(tab.length==0){  
+                                        alert("cochez minimum une checkbox");
+                                    }else if(input_value== ""){
+                                        alert("Le champ de recherche est vide");
+                                    }
+                                    else {
+                                        form.append("checked",1)
+                                        form.append("value",input_value);
+                                         $.ajax({
+                                            type: "post",
+                                            url: "/search/documets",
+                                            processData:false,
+                                            contentType: false,
+                                            data:form,
+                                        }); 
+                                    }    
+                            }else if(selected_value == "Recherche Libre"){ 
+                                if(input_value ==""){
+                                    alert("Le champ de recherche est vide");
+                                }else {
+                                    form.append("checked",0)
+                                    form.append("value",input_value);
+                                    $.ajax({
+                                          type: "post",
+                                            url: "/search/documets",
+                                            processData:false,
+                                            contentType: false,
+                                            data:form,
+                                        }); 
+                                }
+                            }
+                        }else {
+                           alert(" Veuillez selectioner un mode de recherche");
+                        }
+
+                         
+             });
+            });
        
     </script>
 </html>

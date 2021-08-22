@@ -27,10 +27,6 @@ Route::get('/', function () {
 Route::group(['middlware' => ['auth']],function(){
     Route::get("/dashboard","App\Http\Controllers\DashboardController@index")->name("dashboard");
 }); 
-                 // User Routes
-Route::group(["middleware"=>["auth","role:Utilisateur_externe"]],function(){
-    Route::get("/dashboard/myprofil","App\Http\Controllers\DashboardController@profile")->name("dashboard.myprofil");
-});
 
 
                 // Admin Routes
@@ -57,5 +53,13 @@ Route::group(["middlware"=>["auth","role:Editeur"]],function(){
     Route::get("/editeur/{id}/edit",[DocumentController::class,"editDocument"])->name("editeur.edit.doc");
     Route::post("/editeur/save",[DocumentController::class,"storeDocumentEdited"]);
 });
+
+                 // User Routes
+Route::group(["middleware"=>["auth","role:Utilisateur_externe"]],function(){
+    Route::get("/dashboard/myprofil","App\Http\Controllers\DashboardController@profile")->name("dashboard.myprofil");
+    Route::get("/documents",[DocumentController::class,"searchDocument"])->name("user.search_doc_user");
+    Route::post("/search/documets",[DocumentController::class,"viewDocuments"]);
+});
+
 
 
