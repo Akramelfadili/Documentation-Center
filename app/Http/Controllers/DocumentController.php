@@ -70,6 +70,7 @@ class DocumentController extends Controller
         return view("editeur.showDocuments",["documents"=>$documents,"values"=>$values,"files"=>$files]);
     }
 
+
     public function searchDocuments(Request $request){
         if(Request::ajax()) {
             $request=Request::all();
@@ -116,35 +117,71 @@ class DocumentController extends Controller
 
 
 
-    // user
+                                                    // USER functions
+
+
     public function searchDocument(){
         return view("Utilisateur_Externe.Recherche_doc");
     }
+
+
 
     public function viewDocuments(Request $request){
         if(Request::ajax()){
             $request= Request::all();
             $tab_document_ids=[];
             $value=$request["value"];
-            if($request["checked"]== 1){
+
+            // retreiving docment id based on search 
+            if($request["checked"]== 1){  //if search based on "titre" 
                 $number=count($request["checkboxes"]);
-                if($number == 1){
-                    $ids=DB::table("metadonnees")->where("name",$request["checkboxes"][0])->select("id")->get();
+                if($number == 1){  // if only one box checked
+                    $ids=DB::table("metadonnees")->where("name",$request["checkboxes"][0])->select("id")->get();  // get 
                     $row=DB::table("document_metadonnees_values")
                             ->where("metadonnees_id",$ids[0]->id)
                             ->where("value","LIKE","%".$value."%")
                             ->select("document_id")->get();
-                    //dd($row[0]->document_id);
                     for ($i=0; $i <count($row) ; $i++) { 
                         array_push($tab_document_ids,$row[$i]->document_id);
                     }
-                   // dd($tab_document_ids);
+                   
+
+                }else if($number == 2){ // if 2 boxes checked
+                    $id=DB::table("metadonnees")->whereIn("name",[$request["checkboxes"][0],$request["checkboxes"][1]])->select("id")->get();
+                      $rows=DB::table("document_metadonnees_values")
+                        ->whereIn("metadonnees_id",[$id[0]->id,$id[1]->id])
+                        ->where("value","LIKE","%".$value."%")
+                        ->select("document_id")->get();
+                    for ($i=0; $i <count($rows) ; $i++) { 
+                       array_push($tab_document_ids,$rows[$i]->document_id); 
+                    } 
+                    $tab_document_ids=array_unique($tab_document_ids);
+                }  
+
+            }else if($request["checked"] == 0){ // if search based on "search libre"
+                $rows=DB::table("document_metadonnees_values")->where("value","LIKE","%".$value."%")->select("document_id")->get();
+                for ($i=0; $i <count($rows) ; $i++) { 
+                    array_push($tab_document_ids,$rows[$i]->document_id);
                 }
-                
-                
-            }else {
-                dd("Akram");
+                $tab_document_ids=array_unique($tab_document_ids);
             }
-        }
-    }
+          
+            // table of document id ready
+            $tab_document_public=[];
+            $classe_public=DB::table("classe_documents")->where("classe_name","public")->select("id")->get();
+            foreach ($tab_document_ids as  $value_id) {
+                $row=Document::select("classe_id")->where("id",$value_id)->get();
+                if($row[0]->class->classe_name == "public"){
+                    array_push($tab_document_public,$value_id);
+                }
+            }
+            
+
+            $documents=Document::get();
+            $values=DB::table("document_metadonnees_values")->get();   
+            $files=DB::table("files")->get();
+            $returnHTML = view ("Utilisateur_Externe.test",["documents"=>$documents,"values"=>$values,"files"=>$files,"document_ids"=>$tab_document_public])->render();
+            return response()->json(array("success"=>true,"html"=>$returnHTML));   
+        }   
+    }   
 }

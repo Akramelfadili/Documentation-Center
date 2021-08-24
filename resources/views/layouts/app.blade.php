@@ -236,10 +236,13 @@
                                             processData:false,
                                             contentType: false,
                                             data:form,
+                                            success:function(data) { 
+                                                    $('#search_resultst').html(data.html);
+                                             }
                                         }); 
                                     }    
                             }else if(selected_value == "Recherche Libre"){ 
-                                if(input_value ==""){
+                                if(input_value == ""){
                                     alert("Le champ de recherche est vide");
                                 }else {
                                     form.append("checked",0)
@@ -250,14 +253,16 @@
                                             processData:false,
                                             contentType: false,
                                             data:form,
-                                        }); 
+                                             success:function(data) { 
+                                                    $('#search_resultst').html(data.html);
+                                             }
+                                    }); 
                                 }
                             }
                         }else {
                            alert(" Veuillez selectioner un mode de recherche");
                         }
-
-                         
+                       
              });
             });
        
