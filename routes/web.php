@@ -59,7 +59,7 @@ Route::group(["middleware"=>["auth","role:Utilisateur_externe"]],function(){
     Route::get("/dashboard/myprofil","App\Http\Controllers\DashboardController@profile")->name("dashboard.myprofil");
     Route::get("/documents",[DocumentController::class,"searchDocument"])->name("user.search_doc_user");
     Route::post("/search/documets",[DocumentController::class,"viewDocuments"]);
-  
+    Route::post("/search/documents/send",[DocumentController::class,"sendDocumentsMail"]);
 });
 
 

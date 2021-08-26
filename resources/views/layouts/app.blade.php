@@ -262,9 +262,15 @@
                         }else {
                            alert(" Veuillez selectioner un mode de recherche");
                         }
-                       
-             });
-            });
+                    });
+
+                    $("#btn_send_mail").click(function(){
+                        alert("Akram");
+                    });
+
+
+                    
+     });
        
     </script>
 </html>

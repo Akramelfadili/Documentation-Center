@@ -6,7 +6,9 @@ use App\Models\Document;
 use Illuminate\Support\Arr;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 
@@ -184,4 +186,38 @@ class DocumentController extends Controller
             return response()->json(array("success"=>true,"html"=>$returnHTML));   
         }   
     }   
+
+    public function sendDocumentsMail(){    
+       
+        if(Request::ajax()){
+            $request= Request::all();
+            $value= $request["value"];
+            $files = DB::table("files")->where("document_id",$value)->select("name")->get();
+
+            $user = Auth::user();
+
+            $data["email"] = $user->email;
+            $data["title"] = "From DRAO";
+            $data["body"] = "Thank you for visiting our website . Here are the files associated with the document";
+            $list_files=[];
+            foreach ($files as $file) {
+                    array_push($list_files,public_path('\storage\uploads/'.$file->name));
+            }
+            //dd($list_files);
+
+          
+
+            Mail::send("Utilisateur_Externe.email_send",$data ,function($message) use($data,$list_files)     {
+                    $message->to($data["email"],$data["email"])
+                            ->subject($data["title"]);
+
+                    foreach ($list_files as $file) {
+                        $message->attach($file);
+                    }
+            });
+            
+
+            dd("Mail send");
+        }
+    }
 }
