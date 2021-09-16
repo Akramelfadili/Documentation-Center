@@ -37,6 +37,8 @@ class ModeleController extends Controller
             for ($i=0; $i <$tailleTabMo ; $i++) { 
                 DB::table("metadonnees_modele")->insert(["modele_id"=>$id->id,"metadonnees_id"=>$tableMod[$i]]);
             }  
+
+            return response()->json(array("success"=>true));   
         }
     }
         

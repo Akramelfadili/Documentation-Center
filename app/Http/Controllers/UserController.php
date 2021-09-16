@@ -58,7 +58,7 @@ class UserController extends Controller
             //Ajouter utilisateur avec role d'editeur puis redirection vers la page d'editeur de l'admin
         $user->attachRole("Editeur");
         event(new Registered($user));
-        return redirect("/dashboard/admin/editeurs")->with("succes","Editeur added sucessfuly");
+        return redirect("/dashboard/admin/editeurs")->with("success","Editeur added sucessfuly");
     }
 
     /**
@@ -80,8 +80,10 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        /* $user=DB::table("users")->where("id",$id)->get();
-        return view("Admin.ModifierEditeur",["user"=>$user]); */
+         $user=DB::table("users")->where("id",$id)->first();
+        return view("Admin.ModifierEditeur",["user"=>$user]); 
+
+        
     }
 
     /**
@@ -91,9 +93,21 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+            $request->validate([
+                "name" =>"required",
+                "email"=>"required|email"
+            ]);
+
+            $updating = DB::table("users")->where("id",$request->input("id"))
+                                          ->update([
+                                              "name" =>$request->input("name"),
+                                              "email" =>$request->input("email"),
+                                          ]);
+
+            return redirect("/dashboard/admin/editeurs")->with("success","User has been updated");
+
     }
 
     /**
@@ -105,6 +119,6 @@ class UserController extends Controller
     public function destroy($id)
     {
         User::where("id","$id")->delete();
-        return redirect("/dashboard/admin/editeurs");
+        return redirect("/dashboard/admin/editeurs")->with("success","The User has been deleted");
     }
 }

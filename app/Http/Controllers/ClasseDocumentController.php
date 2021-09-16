@@ -14,6 +14,7 @@ class ClasseDocumentController extends Controller
      return view("Admin.classDocument",["classes"=>$classes]);
          
     }
+
    public function addClassDocument(Request $request){
         $request->validate([
         'classe_name' => 'required|string|max:255',
@@ -21,12 +22,13 @@ class ClasseDocumentController extends Controller
         $class = ClasseDocument::create([
             'classe_name' => $request->classe_name,
         ]);
-        return redirect("/admin/classDocument");
+        return redirect("/admin/classDocument")->with('message', 'The success message!');
    }
 
    public function deleteClassDocument($id){
         ClasseDocument::where("id","$id")->delete();
         return redirect("/admin/classDocument");
    }
-    
+
 }
+

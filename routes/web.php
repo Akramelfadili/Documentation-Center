@@ -35,6 +35,8 @@ Route::group(["middleware"=>["auth","role:Admin"]],function(){
     Route::get("/admin/editeurs/add",[UserController::class,"create"])->name("admin.add");    //creer editeur
     Route::post("/admin/editeurs/add",[UserController::class,"store"])->name("admin.add");   //ajouter editeur
     Route::get("/delete/{id}",[UserController::class,"destroy"])->name("admin.delete");  //delete Editeur
+    Route::get("/edit/{id}",[UserController::class,"edit"]);
+    Route::post("/update",[UserController::class,"update"])->name("update"); 
     Route::get("/admin/classDocument",[ClasseDocumentController::class,"index"])->name("admin.classDocument");
     Route::post("/admin/classDocument",[ClasseDocumentController::class,"addClassDocument"])->name("admin.classDocument");
     Route::get("/admin/classDocument/delete/{id}",[ClasseDocumentController::class,"deleteClassDocument"]);

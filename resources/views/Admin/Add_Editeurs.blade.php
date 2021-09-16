@@ -46,7 +46,7 @@
             <div class="flex items-center justify-end mt-4">
                 
 
-                <x-button class="ml-4">
+                <x-button  class="border rounded-lg text-white p-2 bg-blue-700">
                     {{ __('Register') }}
                 </x-button>
             </div>

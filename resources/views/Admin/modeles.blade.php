@@ -8,13 +8,16 @@
         <div class="flex flex-col mt-16 items-center bg-white rounded-lg m-5 max-w-5xl mx-auto    ">
 
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative m-4" role="alert" id="modelname_missing" style="display:none">
-                <span class="block sm:inline pr-16">Entrer le nom du modele</span>
+                <span class="block sm:inline pr-16">Entrer le nom du modele.</span>
             </div>
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative m-4" role="alert" id="checkboxed_empty" style="display:none">
-                <span class="block sm:inline pr-16">No checkboxes checked</span>
+                <span class="block sm:inline pr-16">No checkboxes checked.</span>
             </div>
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative m-4" role="alert" id="bothinputs_empty" style="display:none">
-                <span class="block sm:inline pr-16">Enter Modele name and check checkboxes</span>
+                <span class="block sm:inline pr-16">Enter le Nom du Modele et Cocher un minimun d'une checkbox.</span>
+            </div>
+            <div class="bg-green-100 border text-right border-green-400 text-green-700 px-4 py-3 rounded relative m-4" role="alert" id="modele_added" style="display:none">
+                <span class="block sm:inline pr-16">Modele ajouté avec Succes.</span>
             </div>
 
             <div class="mt-6">
@@ -32,11 +35,11 @@
                 </div>
 
                 <div class="mt-16 text-center ">
-                    <div class="overflow-y-scroll h-1/2 w-full border ">
+                    <div class="overflow-y-scroll h-64 w-full border ">
                         @foreach($meta as $m)
-                            <div id=boxes>
-                                {{ $m->name }}
-                                <input type="checkbox" class="checkitem" id="box" name={{ $m->id }}><br>
+                            <div id=boxes class="m-1">
+                                   {{ $m->name }}
+                                     <input type="checkbox" class="checkitem " id="box" name={{ $m->id }}>
                             </div>
                         @endforeach 
                     </div>

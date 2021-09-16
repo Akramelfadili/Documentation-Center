@@ -2,14 +2,15 @@
     <x-slot name="header">
     </x-slot>
 
-    <div>
+    <div class="bg-white flex flex-col justify-center  rounded-lg h-auto max-w-6xl mx-auto mt-16">
         <div id="succesMessage">
-
+         
         </div>
+        
         <label for="">Choissisez un modele de Document a a ajouter</label>
         <div id="select">
             <select >
-                <option selected disabled>Choose modele</option>
+                <option selected disabled>---Choisissez modele---</option>
                 @foreach($modele as $m)
                        <option >{{ $m->model_name }}</option> 
                 @endforeach
@@ -19,7 +20,7 @@
         <label for="">Classe de documents associe au Document</label>
         <div id="class_doc">
             <select>
-                <option selected disabled>Choose classe</option>
+                <option selected disabled>---Choisissez classe---</option>
                 @foreach($classes as $classe)
                 
                     <option  >{{ $classe->classe_name }}</option>

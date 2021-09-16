@@ -26,7 +26,6 @@ class DocumentController extends Controller
             $classe=$request["classeName"]; //classe name
             $files=$request["files"]; // files
             $ids=$request["ids"];
-           // dd($files);
             $values=$request["values"];
             
               // get id of selected model
@@ -65,7 +64,7 @@ class DocumentController extends Controller
     }
 
     public function showDocuments(){
-        //$documents=Document::paginate(3);     //get all docments
+        //$documents=Document::paginate(5);     //get all docments
         $documents=Document::get();     //get all docments
         $values=DB::table("document_metadonnees_values")->get();   // get values to show them based on documents details
         $files=DB::table("files")->get();
@@ -101,19 +100,23 @@ class DocumentController extends Controller
     public function storeDocumentEdited(Request $request){
         if(Request::ajax()){
             $request=Request::all();
+           // $classe=$request["classe"];
             $ids=$request["ids"];
             $values=$request["values"];
             $doc_id=$request["id_doc"];
-           //dd($values[0]);
-            for ($i=0; $i <count($ids); $i++) { 
+            
+            $classe_id= DB::table("classe_documents")->where("classe_name",$request["classe"])->select("id")->get();
+             Document::where("id",(int)$doc_id)->update(["classe_id" => $classe_id[0]->id]);
+
+              for ($i=0; $i <count($ids); $i++) { 
                DB::table("document_metadonnees_values")
                             ->where([
                                 ["document_id",(int)$doc_id],
                                 ["metadonnees_id",(int)$ids[$i]]
                             ])
                             ->update(["value"=>$values[$i]]);
-            }  
-
+            }   
+ 
         }
     }
 

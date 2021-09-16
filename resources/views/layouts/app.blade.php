@@ -47,6 +47,7 @@
                          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                          }
                  });
+
              
                 //Add modele on click button
                 $("#btn").click(function(){
@@ -66,14 +67,15 @@
                         $("#checkboxed_empty").show("slow").delay(3000).hide("slow")
                     }else {
                          var data={name:modelname,tableau:tab};
-                         console.log("we vibing");
                          $.ajax({
                             type: "POST",
                             url: "/admin/modele",
                             data: data,
                             success: function(response)
                                 {
-                                    $('#response').html(response);
+                                    if(response.success == true){
+                                        $("#modele_added").show("slow").delay(3000).hide("slow");
+                                   }
                                 }
                         }); 
                     }
@@ -96,41 +98,53 @@
                     $('#' + value).show();  
                 });
 
+
                 //get and send document data
                 $(".button_add_doc").click(function(e){
                     var modele=$('#select :selected').text();  //modele selected
-                    console.log(modele);
-                    var classe=$('#class_doc :selected').text();  //modele selected
-                    console.log(classe);
+                    var classe=$('#class_doc :selected').text();  //class selected
+
+                    var ids =[] ,values= [];
                     var form = new FormData();
                     $("#"+modele+" input").each(function(){
                             var input=$(this);
                             if(input.attr("type")!="hidden" && input.attr("type")!="file"){
                                 var name=input.attr("name");
+                                ids.push(name);
                                 form.append("ids[]",name);             // get all ids
                                 var value=input.val();
+                                values.push(value);
                                 form.append("values[]",value);          //get alls input values
                             }
                     }); 
-                    
-                    //get files
-                    var files = $('.'+modele)[0].files;
-                   
+                     //get files
+                     var files = $('.'+modele)[0].files;
                     for (let index = 0; index < files.length; index++) {
                         form.append( "files[]" , files[index] );
                     }
                     //add data for object send by ajax
                     form.append("modeleName",modele);
                     form.append("classeName",classe);
-                     $.ajax({
-                      type: "POST",
-                      url: "/editeur/sendDocument",
-                      processData:false,
-                      contentType: false,
-                      data:form,
-                      success: function (response) {    
-                      }  
-                    });    
+                    // verificaiton
+                    if(files.length == 0){
+                            alert("No files selected");
+                    }else if(classe == "---Choisissez classe---"){
+                        alert("Selectionnez une classe de document");
+                    }else if(values){
+                        var verify = new Boolean("true");
+                        for (let index = 0; index < values.length; index++) {
+                          if(values[index] == ""){
+                              verify = false;
+                          }
+                       }
+                       if(!verify){
+                           alert("Remplisser tous les champs de metadonnees");
+                       }
+                    }else {
+                           alert("all good");
+                    }
+                   
+                  /*       */
                     
                 });
 
@@ -153,16 +167,21 @@
                                     array.push(data[index].document_id);
                                 }
                             }
-                            console.log(array);
                             if(value ==""){
                                 $(".doc_divs").show();
-                            }else if(value!="") {
+                                $(".response_search").hide();
+                                $(".pagination_documents").show();
+                            }else if(value!="" && array.length != 0) {
                                 $(".doc_divs").hide();
+                                $(".response_search").hide();
+                                $(".pagination_documents").hide();
                                 for (let index = 0; index < array.length; index++) {
                                     $("#"+array[index]).show();
                                 }
-                            }else{
-                                console.log("akram")
+                            }else if(value!="" && array.length == 0){
+                               $(".doc_divs").hide();
+                              $(".response_search").show();
+                              $(".pagination_documents").hide();
                             }
                             
                        }   
@@ -175,19 +194,20 @@
                        
                         var input=$(this);
                         if(input.attr("type")!="hidden" ){
-                            //var name=parseInt(input.attr("name"));
+                            var classe = $(".class_select").find(":selected").text();
+                            form.append("classe",classe);
                             var name=input.attr("name");
-                           // console.log(name);
+                            // console.log(name);
                             form.append("ids[]",name);
                             //console.log(typeof name);
                             var value=input.val();
                             form.append("values[]",value);
-                            //console.log(value);
+                            // console.log(value);
                         }
                     });
                     var id=$(this).closest("form").attr("class");
                     form.append("id_doc",id);
-                      $.ajax({
+                     $.ajax({
                       type: "POST",
                       url: "/editeur/save",
                       processData:false,
@@ -207,6 +227,9 @@
                            $("#based_select").hide();
                        }
                 });
+
+
+
                     // on click recherche button
                 $("#btn_recherche_doc").on("click",function(){
                        var form = new FormData();
@@ -266,6 +289,35 @@
 
                     $("#btn_send_mail").click(function(){
                         alert("Akram");
+                    });
+
+                    //modifier
+
+                    $(".modifier_classe_btn").on("click",function(){
+                            var current = $(this).closest("tr");
+                            var class_id= current.find("td:eq(0)").attr("id");
+                            $(".selected_classe").val(class_id);                            
+                    });
+
+
+                    $(".save_modified_classe").on("click",function(){
+                        var form = new FormData();
+                       var value = $(this).closest("div").find("input:eq(0)").val();
+                        form.append("value",value);
+                        $$.ajax({
+                            type: "post",
+                            url: "/admin/classDocument/modify",
+                            data: "form",
+                            dataType: "dataType",
+                            success: function (response) {
+                                
+                            }
+                        });
+                        
+                    })
+
+                    $(".close_btn").click(function(){
+                        $(".alert_message").hide();
                     });
 
 
