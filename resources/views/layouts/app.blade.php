@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@tailwindcss/custom-forms@0.2.1/dist/custom-forms.css" rel="stylesheet">
         <meta name="csrf-token" content="{{ csrf_token() }}" />
 
         <title>{{ config('app.name', 'Laravel') }}</title>
@@ -101,11 +102,12 @@
 
                 //get and send document data
                 $(".button_add_doc").click(function(e){
+
                     var modele=$('#select :selected').text();  //modele selected
                     var classe=$('#class_doc :selected').text();  //class selected
-
                     var ids =[] ,values= [];
                     var form = new FormData();
+
                     $("#"+modele+" input").each(function(){
                             var input=$(this);
                             if(input.attr("type")!="hidden" && input.attr("type")!="file"){
@@ -117,6 +119,7 @@
                                 form.append("values[]",value);          //get alls input values
                             }
                     }); 
+
                      //get files
                      var files = $('.'+modele)[0].files;
                     for (let index = 0; index < files.length; index++) {
@@ -125,8 +128,39 @@
                     //add data for object send by ajax
                     form.append("modeleName",modele);
                     form.append("classeName",classe);
-                    // verificaiton
-                    if(files.length == 0){
+                    
+
+                    var verify = true ; 
+                     if(classe == "---Choisissez classe---"){
+                         $("#classe_missing").show("slow").delay(3000).hide("slow");
+                         verify = false;
+                     }else if( files.length == 0 ){    $("#files_missing").show("slow").delay(3000).hide("slow"); verify = false;}
+                     else { 
+                          var check = true;
+                           for (let index = 0; index < ids.length; index++) {
+                              if(values[index]==""){ check = false;}
+                           }
+                           if(check ==false){ $("#fields_missing").show("slow").delay(3000).hide("slow");;verify = false;}
+                    }
+                        
+                    if(verify ==true){
+                        $.ajax({
+                            type: "post",
+                            url: "/editeur/sendDocument",
+                            data: form,
+                            processData:false,
+                            contentType: false,
+                            success: function (response) {
+                                if(response.success == true){
+                                        $("#document_ajouter_success").show("slow").delay(3000).hide("slow");
+                                   }
+                            }
+                        });
+                        
+                        
+                    }
+             });
+                   /*  if(files.length == 0){
                             alert("No files selected");
                     }else if(classe == "---Choisissez classe---"){
                         alert("Selectionnez une classe de document");
@@ -141,12 +175,13 @@
                            alert("Remplisser tous les champs de metadonnees");
                        }
                     }else {
-                           alert("all good");
-                    }
+                       console.log(("All goood"));
+                    } */
+                    //console.log("All goood");
                    
-                  /*       */
+         
                     
-                });
+                
 
 
 
@@ -213,7 +248,10 @@
                       processData:false,
                       contentType: false,
                       data:form,
-                      success: function (response) {    
+                      success: function (response) {
+                        if(response.success == true){
+                                        $("#document_updated").show("slow").delay(3000).hide("slow");
+                                   }
                       }  
                     });   
                 });
@@ -295,27 +333,30 @@
 
                     $(".modifier_classe_btn").on("click",function(){
                             var current = $(this).closest("tr");
-                            var class_id= current.find("td:eq(0)").attr("id");
-                            $(".selected_classe").val(class_id);                            
+                            var value= current.find("td:eq(0)").html();
+                            var id= current.find("td:eq(0)").attr("id");
+                            $(".selected_classe_value").val(value);     
+                            $(".selected_classe_id").val(id);                   
                     });
 
-
-                    $(".save_modified_classe").on("click",function(){
+                    /* $(".save_classe_modified").on("click",function(){
                         var form = new FormData();
-                       var value = $(this).closest("div").find("input:eq(0)").val();
+                        var id = $(this).closest("div").find("input:eq(0)").val();
+                        var value = $(this).closest("div").find("input:eq(1)").val();
+                        form.append("id",id);
                         form.append("value",value);
-                        $$.ajax({
+                        /* $.ajax({
                             type: "post",
-                            url: "/admin/classDocument/modify",
+                            url: "/classeDocument/update",
                             data: "form",
                             dataType: "dataType",
                             success: function (response) {
                                 
                             }
-                        });
+                        });  
                         
-                    })
-
+                    }) */
+                      
                     $(".close_btn").click(function(){
                         $(".alert_message").hide();
                     });

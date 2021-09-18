@@ -22,12 +22,20 @@ class ClasseDocumentController extends Controller
         $class = ClasseDocument::create([
             'classe_name' => $request->classe_name,
         ]);
-        return redirect("/admin/classDocument")->with('message', 'The success message!');
+        return redirect("/admin/classDocument")->with('success', 'Classe de document Ajouté');
    }
 
    public function deleteClassDocument($id){
         ClasseDocument::where("id","$id")->delete();
-        return redirect("/admin/classDocument");
+        return redirect("/admin/classDocument")->with("success","Classe de document Supprimé");
+   }
+
+   public function update(Request $request){
+        $value = $request->input("classe_name");
+        $id = $request->input("classe_id");
+
+     $update = DB::table("classe_documents")->where("id",$id)->update(["classe_name" =>$value]);
+     return  redirect("/admin/classDocument")->with("success","La Classe a été modifié");
    }
 
 }

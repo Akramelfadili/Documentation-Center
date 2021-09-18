@@ -21,9 +21,11 @@ class DocumentController extends Controller
         if(Request::ajax()) {
 
             $request=Request::all();
-           // dd($request);
+             //dd($request);
+            
             $modele=$request["modeleName"]; //modele name
             $classe=$request["classeName"]; //classe name
+            echo $classe;
             $files=$request["files"]; // files
             $ids=$request["ids"];
             $values=$request["values"];
@@ -60,6 +62,8 @@ class DocumentController extends Controller
                 $path='/storage/app/public/'.$filePath;
                 DB::table("files")->insert(["document_id"=>$documentID->id,"name"=>$fileName,"file_path"=>$path]);
             }  
+
+            return response()->json(array("success"=>true));        
         }
     }
 
@@ -115,8 +119,10 @@ class DocumentController extends Controller
                                 ["metadonnees_id",(int)$ids[$i]]
                             ])
                             ->update(["value"=>$values[$i]]);
-            }   
- 
+                }   
+
+         /*    return redirect("/editeur/Documents")->with("success","Document has been edited"); */
+         return response()->json(array("success"=>true));     
         }
     }
 

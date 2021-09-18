@@ -40,6 +40,7 @@ Route::group(["middleware"=>["auth","role:Admin"]],function(){
     Route::get("/admin/classDocument",[ClasseDocumentController::class,"index"])->name("admin.classDocument");
     Route::post("/admin/classDocument",[ClasseDocumentController::class,"addClassDocument"])->name("admin.classDocument");
     Route::get("/admin/classDocument/delete/{id}",[ClasseDocumentController::class,"deleteClassDocument"]);
+    Route::get("/classeDocument/update",[ClasseDocumentController::class,"update"])->name("admin.class.update");
     //Modele
     Route::get("/admin/modele",[ModeleController::class,"index"])->name('admin.modele.index');
     Route::post("/admin/modele",[ModeleController::class,"store"])->name('admin.modele.index');
