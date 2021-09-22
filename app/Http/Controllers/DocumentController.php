@@ -140,6 +140,7 @@ class DocumentController extends Controller
     public function viewDocuments(Request $request){
         if(Request::ajax()){
             $request= Request::all();
+           // dd($request);
             $tab_document_ids=[];
             $value=$request["value"];
 
@@ -188,6 +189,7 @@ class DocumentController extends Controller
             }
             
 
+           // $documents=Document::simplePaginate(3);
             $documents=Document::get();
             $values=DB::table("document_metadonnees_values")->get();   
             $files=DB::table("files")->get();
@@ -200,14 +202,16 @@ class DocumentController extends Controller
        
         if(Request::ajax()){
             $request= Request::all();
+           /*  dd($request); */
             $value= $request["value"];
             $files = DB::table("files")->where("document_id",$value)->select("name")->get();
 
             $user = Auth::user();
-
+            
+      
             $data["email"] = $user->email;
             $data["title"] = "From DRAO";
-            $data["body"] = "Thank you for visiting our website . Here are the files associated with the document";
+            $data["body"] = "Thank you for visiting our website . Here are the files associated with the chosen document";
             $list_files=[];
             foreach ($files as $file) {
                     array_push($list_files,public_path('\storage\uploads/'.$file->name));

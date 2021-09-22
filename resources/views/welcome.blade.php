@@ -149,5 +149,5 @@
                     @endif
                 @endauth
             </div>
-        @end --}}if
+        @end --}}
 </div>

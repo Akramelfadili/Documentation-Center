@@ -1,0 +1,162 @@
+html,body {
+     padding:0;
+     margin:0;
+     height:100%;
+     -moz-background-size: cover;
+     -webkit-background-size: cover;
+     -o-background-size: cover;
+     background-size: cover;
+     font-family: Arial, Helvetica, sans-serif;
+  
+  }
+  
+.container{
+   background-color:white;
+}
+
+  .top{
+       height: 100px;
+         background-color: #F4F1F1;
+  }
+  .header{
+   display: flex;
+   justify-content: flex-end;
+   align-items: center;
+   margin: 0px 50px;
+}
+
+  li,a{
+     color: green;
+     text-decoration: none;
+     font-size: 16px;
+     font-weight: 800;
+  }
+
+  ul{
+     border: 1px solid black;
+     border-right: none;
+     border-left: none;
+  }
+  .logo_div{
+     margin-right: auto;
+     display: flex;
+  }
+  .logo_div p{
+     width: 150px;
+     color: green;
+     margin-left: 15px;
+     text-transform: uppercase;
+     font-size: 15px;
+  }
+
+ 
+  .header ul li {
+     padding: 8px;
+  }
+  .logo{
+     cursor: pointer;
+     margin-top: 15px;
+     width: 70px;
+     height: 70px;
+     margin-right: auto;
+  }
+  
+  .nav_links li{
+     display: inline-block;
+     padding: 0px 20px;
+  }
+  .nav_links li a:hover{
+     color: black;
+  }
+  
+/*   .slide-content p  {
+     margin:50px;
+  }
+
+  .slide-content h1{
+     color: green;
+  }
+ */
+  img {
+     max-width: 100%;
+     max-height: 100%;
+     border-radius: 3px;
+ }
+
+.main{
+     display:grid;
+     grid-template-columns: 40% 60%;
+     background-color: white;
+     margin-top: 25px;
+
+}
+.left_side{
+      padding: 0 15px;
+
+}
+.right_side{
+      margin-right: 15px;
+     height: fit-content;
+     padding :  20px;
+     border-radius: 4px;
+     border: 1px solid #E9E8E8;
+     height: 100%;
+   }
+
+   
+  .right_side h1{
+   padding-left: 15px;
+   font-family:  Arial, Helvetica, sans-serif;
+}
+
+
+.footer{
+     width: 100%;
+     background-color:#302B2A;
+     color: white;
+     height: 50px;
+     display: flex;
+     position: fixed;
+     bottom: 0;
+     flex-direction: row;
+     justify-content: space-around;
+     align-items: center;
+
+  }
+
+
+
+  #method_search_select{
+     padding: 10px;
+     border: 1px solid ;
+     border-radius: 3px;
+     margin-left: 25px;
+      margin-bottom: 10px;
+  }
+
+  #based_select{
+     margin-left: 45px;
+  }
+  .recheche_input_text{
+   padding: 7px;
+   margin-left: 25px;
+  }
+  #btn_recherche_doc{
+     padding: 7px;
+     margin-left: 5px;
+     background-color: green;
+     color: white;
+  }
+
+  .ModeTitle{
+     margin-left: 50px;
+
+     font-weight: 600;
+
+  }
+  .recherche{
+     margin-bottom: 50px;
+  }
+  hr{
+     border: 1px solid #F4F1F1;
+  }

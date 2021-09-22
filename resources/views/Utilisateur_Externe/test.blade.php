@@ -10,60 +10,80 @@
          <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
          <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
          <meta name="csrf-token" content="{{ csrf_token() }}" />
+         <link href="https://cdn.jsdelivr.net/npm/@tailwindcss/custom-forms@0.2.1/dist/custom-forms.css" rel="stylesheet">
+         <link rel="stylesheet"  href="{{ url('/css/test.css') }}" />
     </head>
     <body>
          
-     <p><a href="{{ route("user.search_doc_user") }}">Return to Search view</a></p>
+{{--      <p><a href="{{ route("user.search_doc_user") }}">Return to Search view</a></p> --}}
 
      <div id="search_resultst">
-
-          <p>
+               <h1>Resultats de la Recherche</h1>
+          <div>
                @for($i = 0; $i <count($document_ids); $i++)
+                    <div class="div_doc">
                     @foreach ($documents as $doc)
+                     
                          @if($doc->id == $document_ids[$i])
                               <div>
-                                   Model : {{ $doc->model->model_name }} <br>
-                                   @foreach ( $doc->metadonneesData as $d)
-                                        {{$d->name  }} :
-                                        @for($j = 0; $j < count($values); $j++)
-                                             @if ($values[$j]->document_id == $doc->id && $values[$j]->metadonnees_id == $d->id)
-                                                  {{ $values[$j]->value}}
-                                              @endif
-                                        @endfor
-                                         <br>
+                                   <div class="model_name">
+                                        <label class="model_label" >Model</label> : {{ $doc->model->model_name }} 
+                                   </div>
+                                        {{-- Metadonnees --}}
+                                   <div class="meta_div">
+                                        @foreach ( $doc->metadonneesData as $d)
+                                        <div class="metadonnees">
+                                             <label class="meta_label" >{{$d->name  }} :</label>  
+                                             @for($j = 0; $j < count($values); $j++)
+                                                  @if ($values[$j]->document_id == $doc->id && $values[$j]->metadonnees_id == $d->id)
+                                                      <span>{{ $values[$j]->value}}</span> 
+                                                   @endif
+                                             @endfor   
+                                        </div>
                                    @endforeach
-                                   @for($k = 0; $k < count($files); $k++)
-                                        @if($doc->id == $files[$k]->document_id )
-                                             <a download="{{ $files[$k]->name }}" href="{{ Storage::url('uploads/'.$files[$k]->name) }}" >
-                                             {{ $files[$k]->name }}  
-                                        </a><br>
-                                        @endif 
-                                    @endfor
+
+                                   </div>
+                                  
+
+                                        {{-- Files --}}
+                                   <div class="files">
+                                        <label>Files : </label>
+                                             @for($k = 0; $k < count($files); $k++)
+                                                  @if($doc->id == $files[$k]->document_id )
+                                                            <a download="{{ $files[$i]->name }}" href="{{ Storage::url('uploads/'.$files[$i]->name) }}" >
+                                                                 @if( substr(strrchr($files[$i]->name,'.'),1)  == "docx")
+                                                                      <img src="{{ asset("images/word.svg") }}" style="width: 20px; height:20px;" alt="">
+                                                            @elseif( substr(strrchr($files[$i]->name,'.'),1)  == "pptx")
+                                                                      <img src="{{ asset("images/ppt.svg") }}" style="width: 20px; height:20px;" alt="">
+                                                                 @elseif( substr(strrchr($files[$i]->name,'.'),1)  == "accdb")
+                                                                      <img src="{{ asset("images/access.svg") }}" style="width: 20px; height:20px;" alt="">
+                                                                 @elseif( substr(strrchr($files[$i]->name,'.'),1)  == "pdf")
+                                                                      <img src="{{ asset("images/pdf.svg") }}" style="width: 20px; height:20px;" alt="">
+                                                                 @elseif( substr(strrchr($files[$i]->name,'.'),1)  == "xlsx  ")
+                                                                      <img src="{{ asset("images/excel.svg") }}" style="width: 20px; height:20px;" alt="">
+                                                                 @elseif( substr(strrchr($files[$i]->name,'.'),1)  == "jpg"  || substr(strrchr($files[$i]->name,'.'),1)  == "png")
+                                                                      <img src="{{ asset("images/jpg.png") }}" style="width: 20px; height:20px;" alt="">
+                                                                 @else
+                                                                 {{ $files[$i]->name }}
+                                                                 @endif 
+                                                            
+                                                       </a> &emsp;
+                                                       {{--  <a download="{{ $files[$k]->name }}" href="{{ Storage::url('uploads/'.$files[$k]->name) }}" >
+                                                            
+                                                  {{ $files[$k]->name }}   --}}
+                                                       </a>
+                                                  @endif 
+                                              @endfor
+                                   </div>
+                                 
                                          <button class="btn_send_mail" name="{{ $doc->id }}">Send Document Files By Email</button>
                               </div>
-                               <hr>  
                          @endif
                     @endforeach
+                     </div>  
                @endfor
-          </p>
-          <p >Lorem ipsum, dolor sit amet consectetur adipisicing elit. Deleniti impedit modi nobis dicta repudiandae fugiat soluta quas repellat? Natus illo a recusandae veritatis, repellendus obcaecati maiores quo maxime sed laborum!
-               Debitis dicta nam, expedita deserunt dignissimos dolor ab soluta at dolores esse rem eius dolore aliquid officiis aspernatur recusandae ipsa impedit consectetur unde nisi consequuntur adipisci! Non quae beatae eveniet?
-               Minima amet ea perspiciatis voluptates ipsam eum, rem fugiat consequuntur! Iusto, magni! Blanditiis nulla expedita commodi quam, numquam animi facilis aliquid sunt culpa natus dolorum eius sequi eum debitis fuga.
-               Nihil, optio! Error nulla qui esse numquam earum eos necessitatibus delectus, odio neque vel veniam minus aliquam sed nobis assumenda hic ex quisquam incidunt quod accusantium corporis distinctio. Obcaecati, perferendis?
-               At quod ab recusandae deleniti et eaque minus nisi sint accusamus illum magni vero id, commodi nostrum in? Impedit in exercitationem natus soluta corporis. Repellendus ipsam deleniti illum quod minus!
-               Distinctio sunt consectetur deserunt nobis a neque similique atque, dicta sint unde quia eum obcaecati explicabo assumenda tenetur, quae itaque facilis nostrum ratione porro eligendi repellendus repudiandae. Fugiat, quia veritatis.
-               Nemo alias assumenda repellendus dicta incidunt facere vero neque aspernatur cupiditate laudantium qui dolorem adipisci, blanditiis eum modi ut accusamus eius illum corporis inventore enim obcaecati fugiat? Suscipit, eum quos!
-               Explicabo accusantium nihil culpa nemo praesentium similique eligendi architecto officia perferendis in aliquam debitis doloremque consequatur expedita eaque eos dolores beatae aspernatur, quis, fugiat minima aliquid esse! Ex, commodi rem.
-               Iste maxime atque soluta aperiam odit! Nobis autem blanditiis a molestiae praesentium consectetur, deserunt pariatur qui facere beatae provident ducimus voluptatem ab, officiis, odit animi enim necessitatibus tempora! Molestias, voluptas!
-               Nemo sint totam nostrum voluptatibus perferendis ipsa enim eligendi, ea nam natus. Accusamus molestias fugiat, tempore laudantium recusandae consectetur soluta ea quaerat veritatis. Omnis quo repudiandae, placeat eligendi voluptatibus veritatis?
-               Accusamus magni voluptatibus odio dolorum qui accusantium quidem commodi? Nulla suscipit incidunt id? Suscipit sed minus commodi, non impedit, molestias placeat tenetur nihil laudantium quo voluptatem necessitatibus, blanditiis nostrum fuga.
-               Ipsa numquam nisi alias ullam aperiam cupiditate ducimus iusto soluta iste maiores exercitationem excepturi ipsam voluptas eius dolor error recusandae suscipit adipisci, deleniti earum saepe sequi officiis! Sunt, explicabo ab.
-               Provident placeat repellendus quia neque dicta assumenda, a harum ratione doloremque sapiente velit ullam earum libero consequatur cum cupiditate doloribus odit eius dolores voluptate! Iste eum facere ut blanditiis minus.
-               Provident, repudiandae dignissimos. Neque dolor perspiciatis ut mollitia tempora qui culpa eligendi cumque, iusto consequuntur optio architecto dolore repellendus itaque sint nam sequi veniam repudiandae blanditiis inventore libero cum rerum.
-               Animi molestias ea, expedita cum eaque error nesciunt commodi hic culpa inventore, quae obcaecati vitae iste repudiandae dolorum sed praesentium velit quisquam veritatis fuga. Cupiditate consequatur eum nisi accusamus fuga?</p>
-     
-              
-     </div>
+               
+          </div>
     </body>
 
 
@@ -80,16 +100,17 @@
                          var value = $(this).attr("name");
                          var form = new FormData();
                          form.append("value",value);
-                         $.ajax({
+                          $.ajax({
                               type: "POST",
                               url : "/search/documents/send",
                               processData:false,
                               contentType: false,
+                              headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                               data: form,
                               success: function (response) {
-                                   
+
                               }
-                         });
+                         }); 
                });
            });
      </script>

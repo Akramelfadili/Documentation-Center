@@ -21,7 +21,7 @@ use App\Http\Controllers\ClasseDocumentController;
 require __DIR__.'/auth.php';   
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('interface');
 });
 
 Route::group(['middlware' => ['auth']],function(){

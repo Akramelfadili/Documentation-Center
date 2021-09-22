@@ -1,0 +1,20 @@
+.div_doc{
+     margin: 20px 0px;
+     border: 1px solid black;
+     border-radius: 4px;
+     padding: 10px 25px;
+}
+.model_name{
+     padding: 5px 70px;
+    
+}
+.model_label{
+     font-weight: bold;
+     text-decoration: underline;  
+}
+.metadonnees{
+     margin: 7px 7px;
+}
+.meta_label{
+     font-weight: bold;
+}
